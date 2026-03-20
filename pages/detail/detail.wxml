@@ -1,0 +1,132 @@
+<!--pages/detail/detail.wxml - 详情页-->
+<view class="container">
+  <view wx:if="{{drama}}" class="detail-content">
+    <!-- 海报和信息 -->
+    <view class="header card">
+      <image class="poster" src="{{drama.poster}}" mode="aspectFill"></image>
+      <view class="info">
+        <view class="title">{{drama.title}}</view>
+        <view class="original-title" wx:if="{{drama.originalTitle}}">{{drama.originalTitle}}</view>
+        <view class="rating" wx:if="{{drama.rating > 0}}">
+          <text class="score">⭐ {{drama.rating}}</text>
+          <text class="count">({{drama.ratingCount}}人评价)</text>
+        </view>
+        <view class="meta">
+          <text wx:if="{{drama.year}}">{{drama.year}}</text>
+          <text wx:if="{{drama.duration}}">{{drama.duration}}</text>
+          <text wx:if="{{drama.subtype}}">{{drama.subtype === 'tv' ? '电视剧' : '电影'}}</text>
+        </view>
+        <view class="genres">
+          <text wx:for="{{drama.genres}}" wx:key="*this" class="genre-tag">{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 导演和演员 -->
+    <view wx:if="{{drama.directors.length > 0 || drama.casts.length > 0}}" class="credits card">
+      <view wx:if="{{drama.directors.length > 0}}" class="credit-item">
+        <text class="credit-label">导演</text>
+        <text class="credit-value">{{drama.directors.join('、')}}</text>
+      </view>
+      <view wx:if="{{drama.casts.length > 0}}" class="credit-item">
+        <text class="credit-label">主演</text>
+        <text class="credit-value">{{drama.casts.join('、')}}</text>
+      </view>
+    </view>
+
+    <!-- 观看进度 -->
+    <view class="progress-section card">
+      <view class="section-title">观看进度</view>
+      
+      <view class="status-tabs">
+        <view 
+          class="status-tab {{drama.watchStatus === 'watching' ? 'active' : ''}}" 
+          bindtap="changeStatus" 
+          data-status="watching"
+        >追剧中</view>
+        <view 
+          class="status-tab {{drama.watchStatus === 'completed' ? 'active' : ''}}" 
+          bindtap="changeStatus" 
+          data-status="completed"
+        >已看完</view>
+        <view 
+          class="status-tab {{drama.watchStatus === 'dropped' ? 'active' : ''}}" 
+          bindtap="changeStatus" 
+          data-status="dropped"
+        >已弃剧</view>
+      </view>
+
+      <view class="progress-controls">
+        <view class="control-group">
+          <text class="control-label">季数</text>
+          <view class="selector">
+            <button class="selector-btn" bindtap="changeSeason" data-delta="-1">-</button>
+            <text class="selector-value">第 {{drama.currentSeason}} 季</text>
+            <button class="selector-btn" bindtap="changeSeason" data-delta="1">+</button>
+          </view>
+        </view>
+
+        <view class="control-group">
+          <text class="control-label">集数</text>
+          <view class="selector">
+            <button class="selector-btn" bindtap="changeEpisode" data-delta="-1">-</button>
+            <text class="selector-value">{{drama.currentEpisode}} 集
+              <text wx:if="{{drama.episodesCount > 0}}">/ {{drama.episodesCount}}</text>
+            </text>
+            <button class="selector-btn" bindtap="changeEpisode" data-delta="1">+</button>
+          </view>
+        </view>
+      </view>
+
+      <view class="progress-bar-container">
+        <view class="progress-bar" style="width: {{progressPercent}}%"></view>
+      </view>
+      <text class="progress-text">{{progressPercent}}%</text>
+
+      <view class="action-buttons">
+        <button class="btn-primary btn-block" bindtap="quickAddEpisode">+1 集（快速更新）</button>
+      </view>
+    </view>
+
+    <!-- 观看统计 -->
+    <view class="stats-section card">
+      <view class="section-title">观看统计</view>
+      <view class="stats-grid">
+        <view class="stats-item">
+          <text class="stats-value">{{drama.watchedEpisodes ? drama.watchedEpisodes.length : 0}}</text>
+          <text class="stats-label">已看集数</text>
+        </view>
+        <view class="stats-item">
+          <text class="stats-value">{{estimateWatchTime}}</text>
+          <text class="stats-label">观看时长</text>
+        </view>
+        <view class="stats-item">
+          <text class="stats-value">{{drama.episodesCount > 0 ? drama.episodesCount - drama.currentEpisode : '-'}}</text>
+          <text class="stats-label">剩余集数</text>
+        </view>
+        <view class="stats-item">
+          <text class="stats-value">{{formatUpdateTime(drama.updateTime)}}</text>
+          <text class="stats-label">最后更新</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 简介 -->
+    <view wx:if="{{drama.summary}}" class="summary-section card">
+      <view class="section-title">剧情简介</view>
+      <view class="summary-text {{expanded ? '' : 'collapsed'}}" bindtap="toggleExpand">
+        {{drama.summary}}
+      </view>
+      <text class="expand-hint" bindtap="toggleExpand">{{expanded ? '收起' : '展开'}}</text>
+    </view>
+
+    <!-- 删除按钮 -->
+    <view class="delete-section">
+      <button class="btn-danger" bindtap="removeDrama">删除此追剧</button>
+    </view>
+  </view>
+
+  <view wx:else class="loading">
+    <text>加载中...</text>
+  </view>
+</view>

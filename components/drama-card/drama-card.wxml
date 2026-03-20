@@ -1,0 +1,35 @@
+<!--components/drama-card/drama-card.wxml - 影视卡片组件-->
+<view class="drama-card card" bindtap="onCardTap">
+  <view class="card-header">
+    <image class="card-poster" src="{{drama.poster}}" mode="aspectFill"></image>
+    <view class="card-info">
+      <view class="card-title">{{drama.title}}</view>
+      <view class="card-meta">
+        <text class="card-year">{{drama.year}}</text>
+        <text wx:if="{{drama.rating > 0}}" class="card-rating">⭐ {{drama.rating}}</text>
+      </view>
+      <view class="card-genres">
+        <text wx:for="{{drama.genres}}" wx:key="*this" wx:if="{{index < 3}}" class="genre-tag">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card-progress">
+    <view class="progress-info">
+      <text class="progress-text">S{{drama.currentSeason}} E{{drama.currentEpisode}}
+        <text wx:if="{{drama.episodesCount > 0}}">/ {{drama.episodesCount}}</text>
+      </text>
+      <text class="progress-percent">{{percent}}%</text>
+    </view>
+    <view class="progress-container">
+      <view class="progress-bar" style="width: {{percent}}%"></view>
+    </view>
+  </view>
+
+  <view class="card-footer">
+    <view class="status-badge status-{{drama.watchStatus}}">
+      {{statusText}}
+    </view>
+    <text class="update-time">{{updateTime}}</text>
+  </view>
+</view>

@@ -1,0 +1,129 @@
+/* components/drama-card/drama-card.wxss - 影视卡片组件样式 */
+
+.drama-card {
+  padding: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.drama-card:active {
+  transform: scale(0.98);
+}
+
+.card-header {
+  display: flex;
+  padding: 24rpx;
+}
+
+.card-poster {
+  width: 160rpx;
+  height: 220rpx;
+  border-radius: 12rpx;
+  flex-shrink: 0;
+  background-color: var(--border-color);
+}
+
+.card-info {
+  flex: 1;
+  margin-left: 24rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4rpx 0;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  color: var(--text-muted);
+  margin-top: 12rpx;
+}
+
+.card-year {
+  margin-right: 16rpx;
+}
+
+.card-rating {
+  color: #ff9500;
+  font-weight: 600;
+}
+
+.card-genres {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 12rpx;
+}
+
+.genre-tag {
+  font-size: 22rpx;
+  color: var(--text-secondary);
+  background-color: var(--bg-color);
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  margin-right: 12rpx;
+  margin-bottom: 8rpx;
+}
+
+.card-progress {
+  padding: 0 24rpx 24rpx;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.progress-text {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.progress-percent {
+  font-size: 24rpx;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.progress-container {
+  width: 100%;
+  height: 12rpx;
+  background-color: var(--border-color);
+  border-radius: 6rpx;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+  border-radius: 6rpx;
+  transition: width 0.3s ease;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  background-color: var(--bg-color);
+  border-top: 1rpx solid var(--border-color);
+}
+
+.update-time {
+  font-size: 22rpx;
+  color: var(--text-muted);
+}

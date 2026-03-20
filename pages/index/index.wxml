@@ -1,0 +1,79 @@
+<!--pages/index/index.wxml - 首页（追剧列表）-->
+<view class="container">
+  <!-- 顶部统计栏 -->
+  <view class="stats-bar card">
+    <view class="stats-item">
+      <text class="stats-value">{{stats.totalDramas}}</text>
+      <text class="stats-label">追剧中</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-value">{{stats.totalWatched}}</text>
+      <text class="stats-label">已看集数</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-value">{{formatTime(stats.totalMinutes)}}</text>
+      <text class="stats-label">观看时长</text>
+    </view>
+    <view class="stats-item" bindtap="toggleTheme">
+      <text class="stats-value">{{theme === 'light' ? '🌙' : '☀️'}}</text>
+      <text class="stats-label">切换主题</text>
+    </view>
+  </view>
+
+  <!-- 搜索入口 -->
+  <view class="search-entry card" bindtap="goToSearch">
+    <view class="search-icon">🔍</view>
+    <text class="search-text">搜索影视，添加追剧</text>
+  </view>
+
+  <!-- 追剧列表 -->
+  <view class="drama-list">
+    <view wx:if="{{dramaList.length === 0}}" class="empty-state">
+      <image src="/images/empty.png" mode="aspectFit"></image>
+      <text class="empty-text">暂无追剧</text>
+      <text class="empty-hint">点击上方搜索添加想追的剧集</text>
+    </view>
+
+    <view wx:for="{{dramaList}}" wx:key="id" class="drama-card card" bindtap="goToDetail" data-id="{{item.id}}">
+      <view class="card-header">
+        <image class="card-poster" src="{{item.poster}}" mode="aspectFill"></image>
+        <view class="card-info">
+          <view class="card-title">{{item.title}}</view>
+          <view class="card-meta">
+            <text class="card-year">{{item.year}}</text>
+            <text class="card-rating" wx:if="{{item.rating > 0}}">⭐ {{item.rating}}</text>
+          </view>
+          <view class="card-genres">
+            <text wx:for="{{item.genres}}" wx:key="*this" class="genre-tag">{{item}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="card-progress">
+        <view class="progress-info">
+          <text class="progress-text">S{{item.currentSeason}} E{{item.currentEpisode}}
+            <text wx:if="{{item.episodesCount > 0}}">/ {{item.episodesCount}}</text>
+          </text>
+          <text class="progress-percent">{{calculatePercent(item)}}%</text>
+        </view>
+        <view class="progress-container">
+          <view class="progress-bar" style="width: {{calculatePercent(item)}}%"></view>
+        </view>
+      </view>
+
+      <view class="card-actions">
+        <view class="status-badge status-{{item.watchStatus}}">
+          {{getStatusText(item.watchStatus)}}
+        </view>
+        <view class="action-buttons">
+          <button class="btn-add-episode" size="mini" bindtap="addEpisode" data-id="{{item.id}}">+1 集</button>
+          <button class="btn-mark" size="mini" bindtap="markCompleted" data-id="{{item.id}}">看完</button>
+        </view>
+      </view>
+
+      <view class="card-update-time">
+        <text>更新于 {{formatUpdateTime(item.updateTime)}}</text>
+      </view>
+    </view>
+  </view>
+</view>

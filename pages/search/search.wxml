@@ -1,0 +1,67 @@
+<!--pages/search/search.wxml - 搜索页-->
+<view class="container">
+  <!-- 搜索框 -->
+  <view class="search-box">
+    <view class="search-input-wrapper">
+      <text class="search-icon">🔍</text>
+      <input 
+        class="search-input" 
+        placeholder="搜索影视名称、演员、导演" 
+        value="{{keyword}}"
+        bindinput="onInput"
+        bindconfirm="onSearch"
+        confirm-type="search"
+      />
+      <text wx:if="{{keyword}}" class="clear-icon" bindtap="clearSearch">✕</text>
+    </view>
+    <button class="search-btn" bindtap="onSearch">搜索</button>
+  </view>
+  
+  <!-- API 源指示器 -->
+  <view class="api-indicator">
+    <text class="api-text">数据源：</text>
+    <text class="api-badge {{apiSource}}">
+      {{apiSource === 'tmdb' ? 'TMDB' : (apiSource === 'douban-cloud' ? '豆瓣云函数' : (apiSource === 'douban' ? '豆瓣' : '自动'))}}
+    </text>
+    <text wx:if="{{hasCloud}}" class="cloud-badge">☁️ 云</text>
+  </view>
+
+  <!-- 热门搜索 -->
+  <view wx:if="{{!searchResult.length && !loading}}" class="hot-search">
+    <view class="section-title">热门搜索</view>
+    <view class="hot-tags">
+      <text wx:for="{{hotKeywords}}" wx:key="*this" class="hot-tag" bindtap="searchWithKeyword">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view wx:if="{{searchResult.length > 0}}" class="result-list">
+    <view class="result-count">找到 {{searchResult.length}} 个结果</view>
+    
+    <view wx:for="{{searchResult}}" wx:key="id" class="result-item card" bindtap="addToDrama" data-item="{{item}}">
+      <image class="result-poster" src="{{item.images ? (item.images.medium || item.images.small) : ''}}" mode="aspectFill"></image>
+      <view class="result-info">
+        <view class="result-title">{{item.title}}</view>
+        <view class="result-meta">
+          <text wx:if="{{item.year}}">{{item.year}}</text>
+          <text wx:if="{{item.rating && item.rating.average > 0}}" class="result-rating">⭐ {{item.rating.average}}</text>
+        </view>
+        <view class="result-genres">
+          <text wx:for="{{item.genres}}" wx:key="*this" wx:if="{{index < 3}}" class="result-tag">{{item}}</text>
+        </view>
+        <view class="add-hint">点击添加到追剧</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading">
+    <text>搜索中...</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:if="{{!loading && searchResult.length === 0 && hasSearched}}" class="empty-state">
+    <text class="empty-text">未找到相关内容</text>
+    <text class="empty-hint">试试其他关键词吧</text>
+  </view>
+</view>
